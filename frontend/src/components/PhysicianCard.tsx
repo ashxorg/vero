@@ -25,17 +25,17 @@ export function PhysicianCard({ physician, selected, onSelect }: PhysicianCardPr
       type="button"
       onClick={onSelect}
       className={clsx(
-        'text-left w-full rounded-xl p-4 border-2 transition-all duration-200 cursor-pointer',
-        'hover:shadow-md hover:-translate-y-0.5',
+        'text-left w-full rounded-xl p-4 border-2 transition-all duration-300 cursor-pointer',
+        'hover:shadow-lg hover:-translate-y-1 active:scale-95',
         selected
-          ? 'border-brand-500 bg-brand-50 shadow-md'
-          : 'border-gray-200 bg-white hover:border-brand-300',
+          ? 'border-brand-500 bg-white shadow-lg'
+          : 'border-gray-200 bg-white hover:border-brand-400',
       )}
     >
       <div className="flex items-start gap-3">
         <div
           className={clsx(
-            'shrink-0 w-12 h-12 rounded-full flex items-center justify-center transition-colors',
+            'shrink-0 w-12 h-12 rounded-full flex items-center justify-center transition-colors duration-200',
             selected ? 'bg-brand-500 text-white' : 'bg-brand-100 text-brand-600',
           )}
         >

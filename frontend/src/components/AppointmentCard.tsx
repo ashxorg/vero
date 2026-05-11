@@ -43,7 +43,7 @@ export function AppointmentCard({ appointment, onStatusChange }: AppointmentCard
   return (
     <div
       className={clsx(
-        'bg-white rounded-xl border-l-4 border border-gray-100 shadow-sm p-4 flex flex-col gap-3',
+        'bg-white rounded-xl border-l-4 border border-gray-100 shadow-sm hover:shadow-md p-4 flex flex-col gap-3 transition-shadow duration-200',
         statusBorder[appointment.status],
       )}
     >

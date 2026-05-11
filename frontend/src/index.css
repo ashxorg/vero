@@ -1,35 +1,46 @@
 @import "tailwindcss";
 
 @theme {
-  --color-brand-50: #f0f9ff;
-  --color-brand-100: #e0f2fe;
-  --color-brand-200: #bae6fd;
-  --color-brand-300: #7dd3fc;
-  --color-brand-400: #38bdf8;
-  --color-brand-500: #0ea5e9;
-  --color-brand-600: #0284c7;
-  --color-brand-700: #0369a1;
-  --color-brand-800: #075985;
-  --color-brand-900: #0c4a6e;
+  /* Vero brand blue — exact color from official logo SVG */
+  --color-brand-50:  #eef6fc;
+  --color-brand-100: #cce5f4;
+  --color-brand-200: #99cbe9;
+  --color-brand-300: #66b1de;
+  --color-brand-400: #4d9fd6;
+  --color-brand-500: #348cc4;
+  --color-brand-600: #2870a0;
+  --color-brand-700: #1e5478;
+  --color-brand-800: #143850;
+  --color-brand-900: #0a1c28;
 
-  --color-success-50: #f0fdf4;
+  --color-success-50:  #f0fdf4;
   --color-success-500: #22c55e;
   --color-success-700: #15803d;
 
-  --color-warning-50: #fffbeb;
+  --color-warning-50:  #fffbeb;
   --color-warning-500: #f59e0b;
   --color-warning-700: #b45309;
 
-  --color-danger-50: #fef2f2;
+  --color-danger-50:  #fef2f2;
   --color-danger-500: #ef4444;
   --color-danger-700: #b91c1c;
 
-  --font-family-sans: 'Inter', system-ui, sans-serif;
+  --font-family-sans:  'Inter', system-ui, sans-serif;
+  --font-family-serif: 'Playfair Display', Georgia, serif;
 }
 
 @layer base {
   body {
-    background-color: #f9fafb;
+    background: linear-gradient(
+      160deg,
+      #cde8f5 0%,
+      #e4f1f9 15%,
+      #f0f0f8 40%,
+      #fce9e0 72%,
+      #f9d5b8 100%
+    );
+    background-attachment: fixed;
+    min-height: 100vh;
     color: #111827;
     font-family: var(--font-family-sans);
     margin: 0;
@@ -38,6 +49,11 @@
 
   * {
     box-sizing: border-box;
+  }
+
+  h1,
+  h2 {
+    font-family: var(--font-family-serif);
   }
 }
 
@@ -55,6 +71,10 @@
     display: -webkit-box;
     -webkit-box-orient: vertical;
     -webkit-line-clamp: 2;
+  }
+
+  .font-serif {
+    font-family: var(--font-family-serif);
   }
 }
 

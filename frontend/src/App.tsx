@@ -10,7 +10,7 @@ export default function App() {
 
   return (
     <ToastProvider>
-      <div className="min-h-screen bg-gray-50">
+      <div className="min-h-screen">
         <Header isAdmin={isAdmin} onToggle={() => setIsAdmin((v) => !v)} />
         <main className="pt-16">
           {isAdmin ? <AdminDashboard /> : <BookingWizard />}

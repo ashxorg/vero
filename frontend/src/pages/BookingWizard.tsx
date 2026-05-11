@@ -141,8 +141,10 @@ export function BookingWizard() {
   return (
     <div className="max-w-3xl mx-auto px-4 py-8">
       <div className="text-center mb-6">
-        <h1 className="text-2xl font-bold text-gray-900">Book an Appointment</h1>
-        <p className="text-gray-500 text-sm mt-1">
+        <h1 className="text-3xl font-bold text-gray-900">
+          Book an <em className="italic">Appointment</em>
+        </h1>
+        <p className="text-gray-500 text-sm mt-2">
           Choose a physician and pick a time that works for you
         </p>
       </div>
@@ -226,7 +228,7 @@ export function BookingWizard() {
               type="button"
               disabled={!canAdvanceStep2()}
               onClick={() => setStep(3)}
-              className="flex items-center gap-2 px-6 py-2.5 bg-brand-500 text-white rounded-full font-semibold text-sm disabled:opacity-40 disabled:cursor-not-allowed hover:bg-brand-600 transition-colors"
+              className="flex items-center gap-2 px-6 py-2.5 bg-brand-500 text-white rounded-full font-semibold text-sm disabled:opacity-40 disabled:cursor-not-allowed hover:bg-brand-600 active:scale-95 transition-all duration-150"
             >
               Continue
               <ChevronRight size={16} />
@@ -296,7 +298,7 @@ export function BookingWizard() {
               type="button"
               disabled={submitting}
               onClick={handleSubmit}
-              className="flex items-center gap-2 px-7 py-2.5 bg-brand-500 text-white rounded-full font-semibold text-sm disabled:opacity-60 disabled:cursor-not-allowed hover:bg-brand-600 transition-colors"
+              className="flex items-center gap-2 px-7 py-2.5 bg-brand-500 text-white rounded-full font-semibold text-sm disabled:opacity-60 disabled:cursor-not-allowed hover:bg-brand-600 active:scale-95 transition-all duration-150"
             >
               {submitting ? (
                 <>

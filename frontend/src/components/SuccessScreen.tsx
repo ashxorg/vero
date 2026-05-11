@@ -18,7 +18,7 @@ export function SuccessScreen({ appointment, onBookAnother }: SuccessScreenProps
         Your appointment request has been submitted. You'll hear back shortly.
       </p>
 
-      <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 w-full max-w-md">
+      <div className="bg-white rounded-2xl border border-gray-100 shadow-xl p-6 w-full max-w-md">
         <h3 className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-4">
           Appointment Summary
         </h3>
@@ -76,7 +76,7 @@ export function SuccessScreen({ appointment, onBookAnother }: SuccessScreenProps
       <button
         type="button"
         onClick={onBookAnother}
-        className="mt-8 px-6 py-2.5 rounded-full border-2 border-brand-500 text-brand-600 font-semibold text-sm hover:bg-brand-50 transition-colors"
+        className="mt-8 px-6 py-2.5 rounded-full border-2 border-brand-500 text-brand-600 font-semibold text-sm hover:bg-brand-50 active:scale-95 transition-all duration-150"
       >
         Book Another Appointment
       </button>
