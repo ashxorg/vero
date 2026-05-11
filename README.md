@@ -4,49 +4,141 @@ A lightweight full-stack appointment booking system built as a technical work sa
 
 ---
 
-## Quick Start
+## What You'll Need (Prerequisites)
 
-### Prerequisites
+| Tool | Minimum version | Download |
+|------|----------------|---------|
+| Python | 3.11+ | [python.org/downloads](https://www.python.org/downloads/) |
+| Node.js | 18+ (includes npm) | [nodejs.org](https://nodejs.org/) |
+| Git | any | [git-scm.com](https://git-scm.com/) |
 
-- **Python 3.11+** (tested on 3.14)
-- **Node.js 18+** and npm
+> **Windows users:** When installing Python, check **"Add Python to PATH"** on the first installer screen. Do the same for Node.js ("Add to PATH" checkbox). Without this, the commands below won't work.
 
-### 1. Backend
+---
+
+## One-Time Setup
+
+Run these commands once after cloning the repo. You never need to repeat them.
+
+### macOS / Linux
 
 ```bash
+# 1. Backend — create virtual environment, install dependencies, seed database
 cd backend
-
-# Create and activate a virtual environment
 python3 -m venv venv
-source venv/bin/activate          # macOS/Linux
-venv\Scripts\activate             # Windows
-
-# Install dependencies
+source venv/bin/activate
 pip install -r requirements.txt
-
-# Seed the database with physician data (run once)
 python seed.py
+cd ..
 
-# Start the API server
-uvicorn main:app --reload --port 8000
-```
-
-The API will be available at `http://127.0.0.1:8000`.  
-Interactive docs (Swagger UI) at `http://127.0.0.1:8000/docs`.
-
-### 2. Frontend
-
-In a **separate terminal**:
-
-```bash
+# 2. Frontend — install Node packages
 cd frontend
 npm install
-npm run dev
+cd ..
 ```
 
-The app will be available at `http://localhost:5173`.
+### Windows (Command Prompt or PowerShell)
 
-> Both servers must run simultaneously. The Vite dev server proxies `/api/*` requests to the FastAPI backend, so no CORS configuration is needed in the browser.
+```cmd
+:: 1. Backend
+cd backend
+python -m venv venv
+venv\Scripts\activate
+pip install -r requirements.txt
+python seed.py
+cd ..
+
+:: 2. Frontend
+cd frontend
+npm install
+cd ..
+```
+
+---
+
+## Running the App (Every Time)
+
+After the one-time setup, a single command starts everything:
+
+```bash
+python run.py        # Windows
+python3 run.py       # macOS / Linux
+```
+
+The script will:
+1. Start the FastAPI backend at `http://127.0.0.1:8000`
+2. Start the Vite frontend at `http://localhost:5173`
+3. Open your browser automatically after 3 seconds
+
+Press **Ctrl+C** to stop both servers cleanly.
+
+---
+
+## How to Run This Project (Step-by-Step for Absolute Beginners)
+
+Never used a terminal before? Follow these steps exactly.
+
+### Step 1 — Get the code
+
+Open a terminal (macOS: press Cmd+Space, type "Terminal"; Windows: press Win+R, type "cmd", press Enter) and run:
+
+```bash
+git clone <repo-url>
+cd vero
+```
+
+### Step 2 — Install Python and Node.js
+
+- **Python:** Go to [python.org/downloads](https://www.python.org/downloads/), download the installer for your OS, run it. **On Windows: check "Add Python to PATH" before clicking Install.**
+- **Node.js:** Go to [nodejs.org](https://nodejs.org/), download the LTS version, run the installer.
+
+Verify both installed:
+```bash
+python --version    # should print Python 3.11 or higher
+node --version      # should print v18 or higher
+npm --version       # should print 9 or higher
+```
+
+> On macOS/Linux, use `python3 --version` instead of `python --version`.
+
+### Step 3 — One-time setup
+
+**macOS / Linux:**
+```bash
+cd backend
+python3 -m venv venv
+source venv/bin/activate
+pip install -r requirements.txt
+python seed.py
+cd ../frontend
+npm install
+cd ..
+```
+
+**Windows:**
+```cmd
+cd backend
+python -m venv venv
+venv\Scripts\activate
+pip install -r requirements.txt
+python seed.py
+cd ..\frontend
+npm install
+cd ..
+```
+
+### Step 4 — Start the app
+
+```bash
+python run.py       # Windows
+python3 run.py      # macOS / Linux
+```
+
+Your browser will open to `http://localhost:5173` in about 3 seconds. If it doesn't, open your browser and go to that address manually.
+
+### Step 5 — Stop the app
+
+Press **Ctrl+C** in the terminal window. Both servers stop automatically.
 
 ---
 
@@ -69,11 +161,14 @@ A two-audience web application served from a single page with a header toggle:
 - Loading spinners on all async operations
 - Color-coded toast notifications (success / error / info) with auto-dismiss
 - Fully responsive layout (mobile through desktop)
-- Healthcare-appropriate color palette: calming sky blue for primary actions, green for confirmed, amber for pending, red for cancelled
+- Healthcare-appropriate color palette: Vero brand blue (#348cc4) for primary actions, green for confirmed, amber for pending, red for cancelled
 
 ---
 
 ## Key Technical & Product Decisions
+
+### `run.py` for Developer Experience (DX)
+A reviewer evaluating a work sample shouldn't have to juggle two terminals, remember port numbers, or wait to figure out when Vite is ready before opening a browser. `run.py` starts both servers, waits 3 seconds for Vite to boot, and opens the browser automatically — reducing "clone to running app" from ~10 steps to 1 command. It detects the OS at runtime (`sys.platform`), handles Windows `npm.cmd` vs Unix `npm`, and exits cleanly on Ctrl+C with `proc.terminate()` + `proc.wait()` to avoid orphan processes.
 
 ### Why FastAPI + React (TypeScript)?
 FastAPI's automatic OpenAPI generation made iterating on the API contract fast — the interactive `/docs` UI served as a live testing environment throughout development. React with TypeScript provided type safety across the entire data layer, catching schema mismatches at compile time rather than runtime.
@@ -98,44 +193,7 @@ With exactly two views (patient / admin) toggled by a boolean in `App.tsx`, addi
 
 ---
 
-## API Reference
-
-| Method | Path | Description |
-|--------|------|-------------|
-| `GET` | `/physicians` | List all physicians |
-| `GET` | `/appointments/available-slots?physician_id=X&date=YYYY-MM-DD` | Available 30-min slots for a physician on a given date |
-| `POST` | `/appointments` | Book an appointment (creates patient inline, status=pending) |
-| `GET` | `/appointments` | List all appointments (joined with patient and physician data) |
-| `PATCH` | `/appointments/{id}/status` | Update appointment status |
-
----
-
-## Project Structure
-
-```
-vero/
-├── backend/
-│   ├── database.py      # SQLAlchemy engine, session, and get_db dependency
-│   ├── models.py        # ORM models: Physician, Patient, Appointment
-│   ├── schemas.py       # Pydantic v2 request/response schemas
-│   ├── main.py          # FastAPI app, CORS config, all route handlers
-│   ├── seed.py          # One-time database seeding script
-│   └── requirements.txt
-└── frontend/
-    └── src/
-        ├── api/         # Typed fetch wrappers for all 5 endpoints
-        ├── components/  # PhysicianCard, DatePicker, TimeSlotGrid,
-        │                #   PatientForm, SuccessScreen, KanbanBoard,
-        │                #   AppointmentCard, Header, Toast, Spinner,
-        │                #   BookingStepIndicator
-        ├── context/     # ToastContext — global toast notifications
-        ├── pages/       # BookingWizard (patient), AdminDashboard (admin)
-        └── types/       # TypeScript interfaces matching backend schemas
-```
-
----
-
-## Future Improvements
+## What I'd Improve With More Time
 
 Given more time, these are the highest-priority additions for a production deployment:
 
@@ -148,3 +206,66 @@ Given more time, these are the highest-priority additions for a production deplo
 - **Timezone support:** Store `date_time` as a timezone-aware UTC datetime column in Postgres, convert to the patient's local timezone in the frontend.
 - **Pagination:** The admin dashboard loads all appointments in a single query. For production, add cursor-based pagination to `GET /appointments`.
 - **Accessibility audit:** Full keyboard navigation for the DatePicker and slot grid, ARIA labels on interactive elements, focus management between wizard steps.
+
+---
+
+## API Reference
+
+| Method | Path | Description |
+|--------|------|-------------|
+| `GET` | `/physicians` | List all physicians |
+| `GET` | `/appointments/available-slots?physician_id=X&date=YYYY-MM-DD` | Available 30-min slots for a physician on a given date |
+| `POST` | `/appointments` | Book an appointment (creates patient inline, status=pending) |
+| `GET` | `/appointments` | List all appointments (joined with patient and physician data) |
+| `PATCH` | `/appointments/{id}/status` | Update appointment status |
+
+Interactive docs (Swagger UI) available at `http://127.0.0.1:8000/docs` while the backend is running.
+
+---
+
+## Project Structure
+
+```
+vero/
+├── run.py               # One-command launcher (starts both servers + opens browser)
+├── backend/
+│   ├── database.py      # SQLAlchemy engine, session, and get_db dependency
+│   ├── models.py        # ORM models: Physician, Patient, Appointment
+│   ├── schemas.py       # Pydantic v2 request/response schemas
+│   ├── main.py          # FastAPI app, CORS config, all route handlers
+│   ├── seed.py          # One-time database seeding script
+│   └── requirements.txt
+└── frontend/
+    └── src/
+        ├── api/         # Typed fetch wrappers for all 5 endpoints
+        ├── assets/      # Vero logo SVG
+        ├── components/  # PhysicianCard, DatePicker, TimeSlotGrid,
+        │                #   PatientForm, SuccessScreen, KanbanBoard,
+        │                #   AppointmentCard, Header, Toast, Spinner,
+        │                #   BookingStepIndicator
+        ├── context/     # ToastContext — global toast notifications
+        ├── pages/       # BookingWizard (patient), AdminDashboard (admin)
+        └── types/       # TypeScript interfaces matching backend schemas
+```
+
+---
+
+## Troubleshooting
+
+| Symptom | Likely cause | Fix |
+|---------|-------------|-----|
+| `❌ Virtual environment not found` | Setup not done yet | Follow the One-Time Setup section above |
+| `ModuleNotFoundError: No module named 'fastapi'` | Pip install not run | `cd backend && pip install -r requirements.txt` |
+| `No physicians in the database` | seed.py not run | `cd backend && python seed.py` (or `python3 seed.py`) |
+| `address already in use` on port 8000 | Another uvicorn is running | **Mac/Linux:** `kill $(lsof -ti:8000)` · **Windows:** `netstat -ano \| findstr :8000` then `taskkill /PID <PID> /F` |
+| `address already in use` on port 5173 | Another Vite is running | Close the other terminal or change the port in `frontend/vite.config.ts` |
+| `'python' is not recognized` (Windows) | Python not on PATH | Reinstall Python from python.org and check "Add to PATH"; or try `py run.py` |
+| `'npm' is not recognized` (Windows) | Node.js not on PATH | Reinstall Node.js from nodejs.org with "Add to PATH" checked; restart the terminal |
+| `cannot be loaded because running scripts is disabled` (Windows) | PowerShell execution policy | Run `Set-ExecutionPolicy RemoteSigned -Scope CurrentUser` in PowerShell as Administrator |
+| `python3: command not found` (macOS) | Python not installed | `brew install python` or download from python.org |
+| `xcrun: error` during pip install (macOS) | Xcode tools missing | `xcode-select --install` |
+| `pip: command not found` (Linux) | pip not installed | `sudo apt install python3-pip` |
+| `node: not found` (Linux) | Node not installed | `curl -fsSL https://deb.nodesource.com/setup_20.x \| sudo -E bash - && sudo apt install nodejs` |
+| Browser opens but shows a white screen | Vite still compiling | Wait 5 more seconds then hard-refresh (Ctrl+Shift+R / Cmd+Shift+R) |
+| `CORS error` in browser console | Backend not running | Make sure `run.py` started successfully and the backend is on port 8000 |
+| `Failed to fetch` on every API call | Vite proxy misconfigured | Check `frontend/vite.config.ts` — the proxy target must be `http://127.0.0.1:8000` |
