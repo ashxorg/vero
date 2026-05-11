@@ -4,15 +4,13 @@ A lightweight full-stack appointment booking system built as a technical work sa
 
 ---
 
-## What You'll Need (Prerequisites)
+## What You'll Need
 
-| Tool | Minimum version | Download |
-|------|----------------|---------|
-| Python | 3.11+ | [python.org/downloads](https://www.python.org/downloads/) |
-| Node.js | 18+ (includes npm) | [nodejs.org](https://nodejs.org/) |
-| Git | any | [git-scm.com](https://git-scm.com/) |
+- **Python 3.11+** — [python.org/downloads](https://www.python.org/downloads/)
+- **Node.js 18+** (includes npm) — [nodejs.org](https://nodejs.org/)
+- **Git** — [git-scm.com](https://git-scm.com/)
 
-> **Windows users:** When installing Python, check **"Add Python to PATH"** on the first installer screen. Do the same for Node.js ("Add to PATH" checkbox). Without this, the commands below won't work.
+> **Windows users:** When installing Python, check **"Add Python to PATH"** on the first installer screen. Do the same for Node.js. Without this, the commands below won't work.
 
 ---
 
@@ -195,8 +193,6 @@ With exactly two views (patient / admin) toggled by a boolean in `App.tsx`, addi
 
 ## What I'd Improve With More Time
 
-Given more time, these are the highest-priority additions for a production deployment:
-
 - **Authentication:** JWT-based auth for the admin view (FastAPI OAuth2 + bcrypt) and optional patient accounts for booking history. The current UI toggle is for demo purposes only.
 - **Database migration:** Switch from SQLite to PostgreSQL using Alembic for schema migrations. SQLite is not suitable for concurrent writes in production.
 - **Email/SMS notifications:** Send confirmation emails via SendGrid or SMS via Twilio when an appointment is created or its status changes.
@@ -211,15 +207,13 @@ Given more time, these are the highest-priority additions for a production deplo
 
 ## API Reference
 
-| Method | Path | Description |
-|--------|------|-------------|
-| `GET` | `/physicians` | List all physicians |
-| `GET` | `/appointments/available-slots?physician_id=X&date=YYYY-MM-DD` | Available 30-min slots for a physician on a given date |
-| `POST` | `/appointments` | Book an appointment (creates patient inline, status=pending) |
-| `GET` | `/appointments` | List all appointments (joined with patient and physician data) |
-| `PATCH` | `/appointments/{id}/status` | Update appointment status |
-
 Interactive docs (Swagger UI) available at `http://127.0.0.1:8000/docs` while the backend is running.
+
+- `GET /physicians` — List all physicians
+- `GET /appointments/available-slots?physician_id=X&date=YYYY-MM-DD` — Available 30-min slots for a physician on a given date
+- `POST /appointments` — Book an appointment (creates patient inline, status=pending)
+- `GET /appointments` — List all appointments (joined with patient and physician data)
+- `PATCH /appointments/{id}/status` — Update appointment status
 
 ---
 
@@ -252,20 +246,47 @@ vero/
 
 ## Troubleshooting
 
-| Symptom | Likely cause | Fix |
-|---------|-------------|-----|
-| `❌ Virtual environment not found` | Setup not done yet | Follow the One-Time Setup section above |
-| `ModuleNotFoundError: No module named 'fastapi'` | Pip install not run | `cd backend && pip install -r requirements.txt` |
-| `No physicians in the database` | seed.py not run | `cd backend && python seed.py` (or `python3 seed.py`) |
-| `address already in use` on port 8000 | Another uvicorn is running | **Mac/Linux:** `kill $(lsof -ti:8000)` · **Windows:** `netstat -ano \| findstr :8000` then `taskkill /PID <PID> /F` |
-| `address already in use` on port 5173 | Another Vite is running | Close the other terminal or change the port in `frontend/vite.config.ts` |
-| `'python' is not recognized` (Windows) | Python not on PATH | Reinstall Python from python.org and check "Add to PATH"; or try `py run.py` |
-| `'npm' is not recognized` (Windows) | Node.js not on PATH | Reinstall Node.js from nodejs.org with "Add to PATH" checked; restart the terminal |
-| `cannot be loaded because running scripts is disabled` (Windows) | PowerShell execution policy | Run `Set-ExecutionPolicy RemoteSigned -Scope CurrentUser` in PowerShell as Administrator |
-| `python3: command not found` (macOS) | Python not installed | `brew install python` or download from python.org |
-| `xcrun: error` during pip install (macOS) | Xcode tools missing | `xcode-select --install` |
-| `pip: command not found` (Linux) | pip not installed | `sudo apt install python3-pip` |
-| `node: not found` (Linux) | Node not installed | `curl -fsSL https://deb.nodesource.com/setup_20.x \| sudo -E bash - && sudo apt install nodejs` |
-| Browser opens but shows a white screen | Vite still compiling | Wait 5 more seconds then hard-refresh (Ctrl+Shift+R / Cmd+Shift+R) |
-| `CORS error` in browser console | Backend not running | Make sure `run.py` started successfully and the backend is on port 8000 |
-| `Failed to fetch` on every API call | Vite proxy misconfigured | Check `frontend/vite.config.ts` — the proxy target must be `http://127.0.0.1:8000` |
+**`❌ Virtual environment not found`**
+Follow the One-Time Setup section above.
+
+**`ModuleNotFoundError: No module named 'fastapi'`**
+Run `cd backend && pip install -r requirements.txt`.
+
+**`No physicians in the database`**
+Run `cd backend && python seed.py` (or `python3 seed.py` on macOS/Linux).
+
+**`address already in use` on port 8000**
+Another uvicorn process is running. On macOS/Linux: `kill $(lsof -ti:8000)`. On Windows: find the PID with `netstat -ano` then `taskkill /PID <PID> /F`.
+
+**`address already in use` on port 5173**
+Another Vite instance is running. Close the other terminal or restart your machine.
+
+**`'python' is not recognized` (Windows)**
+Python is not on PATH. Reinstall from python.org with "Add to PATH" checked, or try `py run.py`.
+
+**`'npm' is not recognized` (Windows)**
+Node.js is not on PATH. Reinstall from nodejs.org with "Add to PATH" checked, then restart the terminal.
+
+**`cannot be loaded because running scripts is disabled` (Windows)**
+Run `Set-ExecutionPolicy RemoteSigned -Scope CurrentUser` in PowerShell as Administrator.
+
+**`python3: command not found` (macOS)**
+Install via `brew install python` or download from python.org.
+
+**`xcrun: error` during pip install (macOS)**
+Run `xcode-select --install` to install Xcode Command Line Tools.
+
+**`pip: command not found` (Linux)**
+Run `sudo apt install python3-pip`.
+
+**`node: not found` (Linux)**
+Install Node.js via your package manager or from nodejs.org.
+
+**Browser opens but shows a white screen**
+Vite may still be compiling. Wait 5 seconds and hard-refresh (Ctrl+Shift+R / Cmd+Shift+R).
+
+**`CORS error` in browser console**
+The backend is not running. Ensure `run.py` started successfully and the API is on port 8000.
+
+**`Failed to fetch` on every API call**
+Check `frontend/vite.config.ts` — the proxy target must be `http://127.0.0.1:8000`.
